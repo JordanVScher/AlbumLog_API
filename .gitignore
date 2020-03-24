@@ -83,10 +83,5 @@ google-secret-key.json
 .vscode
 .vstags
 
-# for random testing
-test.js
-
-# google calendar apikey
-googleapi-key.json
-google_private_key.json
-
+# data for the database seeders
+_data/
