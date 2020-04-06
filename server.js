@@ -9,6 +9,7 @@ connectDB();
 
 // router files
 const albums = require('./routes/albums');
+const auth = require('./routes/auth');
 
 // create app
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 // middleware and routers
 if (process.env.NODE_ENV === 'DEV') app.use(morgan('dev'));
 app.use('/api/v1/albums', albums);
+app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 
 // start server
