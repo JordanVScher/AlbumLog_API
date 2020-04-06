@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const AlbumSchema = new mongoose.Schema({
   title: {
@@ -30,6 +31,12 @@ const AlbumSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// create bootcamp slug from schema from the name
+AlbumSchema.pre('save', function preSlug(next) {
+  this.slug = slugify(this.title, { lower: true });
+  next();
 });
 
 
