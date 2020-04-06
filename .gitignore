@@ -85,3 +85,6 @@ google-secret-key.json
 
 # data for the database seeders
 _data/
+
+# uploaded photos
+public/uploads

@@ -1,6 +1,7 @@
 require('dotenv').config({ path: './config/.env' }); // load env
 const express = require('express');
 const morgan = require('morgan');
+const fileupload = require('express-fileupload');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
@@ -17,10 +18,17 @@ const app = express();
 // body parser
 app.use(express.json());
 
-// middleware and routers
+// logging middleware
 if (process.env.NODE_ENV === 'DEV') app.use(morgan('dev'));
+
+// File uploading
+app.use(fileupload());
+
+// routers
 app.use('/api/v1/albums', albums);
 app.use('/api/v1/auth', auth);
+
+// error middleware
 app.use(errorHandler);
 
 // start server
