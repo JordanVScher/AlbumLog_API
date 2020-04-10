@@ -9,18 +9,19 @@ const {
 
 const Album = require('../models/Album');
 const advancedResults = require('../middleware/advancedResults');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
   .get(advancedResults(Album), getAlbums)
-  .post(addAlbum);
+  .post(protect, authorize('publisher', 'admin'), addAlbum);
 
 router
   .route('/:id')
   .get(getAlbum)
-  .put(updateAlbum)
-  .delete(deleteAlbum);
+  .put(protect, authorize('publisher', 'admin'), updateAlbum)
+  .delete(protect, authorize('publisher', 'admin'), deleteAlbum);
 
 module.exports = router;
