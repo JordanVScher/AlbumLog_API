@@ -4,6 +4,8 @@ const {
   userPhotoUpload,
   login,
   getMe,
+  forgotPassword,
+  resetPassword,
 } = require('../controllers/auth');
 
 const User = require('../models/User');
@@ -27,5 +29,13 @@ router
 router
   .route('/:id/photo')
   .put(protect, photoUpload(User), userPhotoUpload);
+
+router
+  .route('/forgotpassword')
+  .post(forgotPassword);
+
+router
+  .route('/resetpassword/:resettoken')
+  .put(resetPassword);
 
 module.exports = router;
