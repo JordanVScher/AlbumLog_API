@@ -3,6 +3,8 @@ const express = require('express');
 const morgan = require('morgan');
 const fileupload = require('express-fileupload');
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
@@ -23,6 +25,12 @@ app.use(express.json());
 
 // sanitizes user-supplied data
 app.use(mongoSanitize());
+
+// set security headers
+app.use(helmet());
+
+// Prevent XXS attacks
+app.use(xss());
 
 // logging middleware
 if (process.env.NODE_ENV === 'DEV') app.use(morgan('dev'));
