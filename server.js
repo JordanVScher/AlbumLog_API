@@ -11,7 +11,7 @@ connectDB();
 // router files
 const albums = require('./routes/albums');
 const auth = require('./routes/auth');
-const user = require('./routes/user');
+const users = require('./routes/users');
 
 // create app
 const app = express();
@@ -28,7 +28,7 @@ app.use(fileupload());
 // routers
 app.use('/api/v1/albums', albums);
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/user', user);
+app.use('/api/v1/users', users);
 
 // error middleware
 app.use(errorHandler);

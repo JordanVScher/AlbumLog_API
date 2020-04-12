@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   getUsers, getUser, createUser, updateUser, deleteUser,
-} = require('../controllers/user');
+} = require('../controllers/users');
 
 const User = require('../models/User');
 const advancedResults = require('../middleware/advancedResults');
