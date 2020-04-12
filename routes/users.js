@@ -7,8 +7,11 @@ const User = require('../models/User');
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
+const reviewRouter = require('./reviews');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+
+router.use('/:userId/reviews', reviewRouter);
 
 router.use(protect);
 router.use(authorize('admin'));

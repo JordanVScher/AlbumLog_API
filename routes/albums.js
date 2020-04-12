@@ -11,7 +11,11 @@ const Album = require('../models/Album');
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
+const reviewRouter = require('./reviews');
+
 const router = express.Router({ mergeParams: true });
+
+router.use('/:albumId/reviews', reviewRouter);
 
 router
   .route('/')
