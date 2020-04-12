@@ -12,9 +12,11 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   const authorization = req.headers && req.headers.authorization ? req.headers.authorization : null;
   if (authorization && authorization.startsWith('Bearer')) {
+    // Set Token from header
     token = authorization.split(' ')[1]; // eslint-disable-line prefer-destructuring
-  // } else if (req.cookies.token) {
-    // token = req.cookies.token;
+  } else if (req.cookies.token) {
+    // Set Token from cookie
+    token = req.cookies.token;
   }
 
   if (!token) return next(new ErrorResponse(notAuthorizedMsg, 401));

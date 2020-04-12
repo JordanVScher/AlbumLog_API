@@ -2,6 +2,7 @@ require('dotenv').config({ path: './config/.env' }); // load env
 const express = require('express');
 const morgan = require('morgan');
 const fileupload = require('express-fileupload');
+const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
@@ -19,6 +20,9 @@ const app = express();
 
 // body parser
 app.use(express.json());
+
+// sanitizes user-supplied data
+app.use(mongoSanitize());
 
 // logging middleware
 if (process.env.NODE_ENV === 'DEV') app.use(morgan('dev'));
