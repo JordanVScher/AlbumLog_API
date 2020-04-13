@@ -4,7 +4,6 @@ const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused
   let error = { ...err };
   error.message = err.message;
 
-  // Mongoose bad ObjectId
   if (err.name === 'CastError') {
     const message = 'Resource not found';
     error = new ErrorResponse(message, 404);
@@ -19,7 +18,6 @@ const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused
     const message = Object.values(err.errors).map((x) => x.message);
     error = new ErrorResponse(message, 404);
   }
-
 
   res.status(error.statusCode || 500).json({ success: false, error: error.message || 'Server Error' });
 };

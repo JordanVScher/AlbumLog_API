@@ -1,6 +1,10 @@
 const express = require('express');
 const {
-  getUsers, getUser, createUser, updateUser, deleteUser,
+  getUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
 } = require('../controllers/users');
 
 const User = require('../models/User');
