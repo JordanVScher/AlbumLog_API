@@ -36,11 +36,7 @@ const UserSchema = new mongoose.Schema({
   photo: String,
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 // encrypt password using bcrypt
 UserSchema.pre('save', async function(next) { // eslint-disable-line

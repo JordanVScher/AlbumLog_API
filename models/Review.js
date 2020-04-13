@@ -13,13 +13,9 @@ const ReviewSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    min: 1,
+    min: 0,
     max: 10,
     required: [true, 'Please add a rating between 1 and 10'],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
   },
   album: {
     type: mongoose.Schema.ObjectId,
@@ -31,7 +27,7 @@ const ReviewSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-});
+}, { timestamps: true });
 
 // Prevent user from submitting more than one review per album
 ReviewSchema.index({ album: 1, user: 1 }, { unique: true });
@@ -48,9 +44,10 @@ ReviewSchema.statics.getAverageRating = async function (albumId) {
   ]);
 
   try {
-    await this.model('Album').findByIdAndUpdate(albumId, { averageRating: obj[0].averageRating });
+    const newRating = obj && obj[0] && obj[0].averageRating ? obj[0].averageRating : 0;
+    await this.model('Album').findByIdAndUpdate(albumId, { averageRating: newRating });
   } catch (error) {
-    console.log(error.red);
+    console.log(error);
   }
 };
 
@@ -58,10 +55,8 @@ ReviewSchema.post('save', async function () {
   this.constructor.getAverageRating(this.album);
 });
 
-
-ReviewSchema.post('remove', async function aaa(next) {
+ReviewSchema.post('remove', async function () {
   this.constructor.getAverageRating(this.album);
-  next();
 });
 
 

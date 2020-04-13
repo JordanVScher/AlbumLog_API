@@ -46,7 +46,7 @@ exports.createReview = asyncHandler(async (req, res, next) => {
 
 
 exports.updateReview = asyncHandler(async (req, res, next) => {
-  let review = await Review.findById(req.params.id);
+  const review = await Review.findById(req.params.id);
   if (!review) return next(new ErrorResponse(`Review not found with ${req.params.id}`, 404));
 
   // Make sure user is the owner of the review
@@ -54,8 +54,11 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User is not authorized to update Review ${review._id}`, 401));
   }
 
-  review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  Object.keys(req.body).forEach((key) => {
+    review[key] = req.body[key];
+  });
 
+  review.save();
   return res.status(201).json({ success: true, data: review });
 });
 
@@ -68,7 +71,8 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`User is not authorized to delete Review ${review._id}`, 401));
   }
 
-  review = await Review.findByIdAndDelete(req.params.id);
+  review = await Review.findById(req.params.id);
+  review.remove();
 
   return res.status(201).json({ success: true, data: review });
 });

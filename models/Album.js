@@ -27,15 +27,16 @@ const AlbumSchema = new mongoose.Schema({
     max: 10,
   },
   slug: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+}, { timestamps: true });
+
+AlbumSchema.virtual('summary').get(function () {
+  return `${this.title} - ${this.artist} (${this.year})`;
 });
 
 // create bootcamp slug from schema from the name
 AlbumSchema.pre('save', function preSlug(next) {
-  this.slug = slugify(this.title, { lower: true });
+  const slug = `${this.title} ${this.artist} ${this.year}`;
+  this.slug = slugify(slug, { lower: true });
   next();
 });
 
