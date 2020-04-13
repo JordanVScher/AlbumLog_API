@@ -137,7 +137,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   const message = `You are receiving this e-mail because you have requested the reset of a password. Please make a PUT request to: \n\n${resetUrl}`;
 
   try {
-    console.log('message', message);
+    if (process.env.NODE_ENV === 'DEV') console.log('message', message);
     await sendEmail({ email, subject: 'Reset Password', message });
     return res.status(200).json({ success: true, data: 'Email sent' });
   } catch (error) {
@@ -149,4 +149,40 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse('E-mail could not be sent', 500));
   }
+});
+
+// @desc    update user name and e-mail
+// @route   put /api/v1/auth/updatedetails
+// @access  private
+exports.updateDetails = asyncHandler(async (req, res) => {
+  const fieldsToUpdate = {};
+
+  if (req.body.name) fieldsToUpdate.name = req.body.name;
+  if (req.body.email) fieldsToUpdate.email = req.body.email;
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, { new: true, runValidators: true });
+
+  return res.status(200).json({ success: true, data: user });
+});
+
+// @desc    update user password
+// @route   put /api/v1/auth/updatepassword
+// @access  private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const { newPassword } = req.body;
+  const { oldPassword } = req.body;
+
+  if (!newPassword || !oldPassword) return next(new ErrorResponse('Please fill newPassword and oldPassword fields', 400));
+
+  const user = await User.findById(req.user.id).select('+password');
+
+  // check if password matches
+  const isMatch = await user.matchPassword(oldPassword);
+  console.log('isMatch', isMatch);
+  if (!isMatch) return next(new ErrorResponse('Original password invalid', 401));
+
+  user.password = newPassword;
+  user.save();
+
+  return sendTokenResponse(user, 200, res);
 });

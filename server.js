@@ -57,6 +57,10 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 app.use('/api/v1/reviews', reviews);
 
+app.get('/', (req, res) => {
+  res.sendFile('public/index.html', { root: __dirname });
+});
+
 // error middleware
 app.use(errorHandler);
 
