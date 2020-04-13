@@ -1,9 +1,10 @@
 {
-  "name": "musicas_api",
+  "name": "albumlog_api",
   "version": "1.0.0",
-  "description": "Api pro projeto",
+  "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js"
   },
