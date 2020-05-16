@@ -29,6 +29,9 @@ exports.getReview = asyncHandler(async (req, res, next) => {
   const review = await Review.findById(req.params.id).populate({
     path: 'album',
     select: 'title artist year',
+  }).populate({
+    path: 'user',
+    select: 'name email',
   });
 
   if (!review) return next(new ErrorResponse(`Review not found with ID ${req.params.id}`, 404));
