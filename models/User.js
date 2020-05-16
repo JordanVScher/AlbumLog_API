@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Review = require('./Review');
 
 const JWTSecret = process.env.JWT_SECRET;
 const JWTExpire = process.env.JWT_EXPIRE;
@@ -47,6 +48,12 @@ UserSchema.pre('save', async function(next) { // eslint-disable-line
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+// dele user reviews when user is removed
+UserSchema.pre('remove', async function (next) { // eslint-disable-line
+  await Review.deleteMany({ user: this.id });
+  next();
 });
 
 // sign JWT
