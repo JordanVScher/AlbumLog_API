@@ -14,7 +14,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   if (authorization && authorization.startsWith('Bearer')) {
     // Set Token from header
     token = authorization.split(' ')[1]; // eslint-disable-line prefer-destructuring
-  } else if (req.cookies.token) {
+  } else if (req.cookies && req.cookies.token) {
     // Set Token from cookie
     token = req.cookies.token;
   }

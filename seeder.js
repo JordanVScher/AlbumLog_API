@@ -10,6 +10,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useCreateIndex: true,
   useFindAndModify: true,
   useUnifiedTopology: true,
+  dbName: process.env.DB_NAME,
 });
 
 const albums = JSON.parse(fs.readFileSync('./_data/albums.json', 'utf-8'));
