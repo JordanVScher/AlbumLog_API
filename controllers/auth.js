@@ -84,7 +84,10 @@ exports.logout = asyncHandler(async (req, res) => {
 // @route   put /api/v1/auth/get
 // @access  private
 exports.getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).populate({
+    path: 'reviews',
+    select: 'title rating',
+  });
 
   res.status(200).json({ success: true, data: user });
 });

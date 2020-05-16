@@ -14,7 +14,10 @@ exports.getUsers = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/users/:id
 // @access  private
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).populate({
+    path: 'reviews',
+    select: 'title rating',
+  });
   if (!user) return next(new ErrorResponse(`User not found with ${req.params.id}`, 404));
 
   return res.status(201).json({ success: true, data: user });

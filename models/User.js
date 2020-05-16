@@ -38,6 +38,9 @@ const UserSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
 }, { timestamps: true });
 
+UserSchema.set('toObject', { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true });
+
 // encrypt password using bcrypt
 UserSchema.pre('save', async function(next) { // eslint-disable-line
   if (!this.isModified('password')) next();
@@ -68,6 +71,12 @@ UserSchema.methods.getResetPasswordToken = async function () {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
+
+UserSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'user',
+});
 
 
 module.exports = mongoose.model('User', UserSchema);
